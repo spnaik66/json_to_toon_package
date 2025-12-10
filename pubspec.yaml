@@ -1,0 +1,17 @@
+name: json_to_toon
+description: A Flutter/Dart package for converting between JSON and TOON (Token-Oriented Object Notation) formats. TOON is a compact, human-readable encoding optimized for LLM prompts.
+version: 1.0.0
+homepage: https://github.com/yourusername/json_to_toon_package
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  test: ^1.24.0
