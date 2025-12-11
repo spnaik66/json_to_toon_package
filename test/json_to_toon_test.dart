@@ -19,10 +19,7 @@ void main() {
 
     test('encodes nested object', () {
       final json = {
-        'user': {
-          'name': 'Bob',
-          'email': 'bob@example.com'
-        }
+        'user': {'name': 'Bob', 'email': 'bob@example.com'}
       };
       final toon = encoder.encode(json);
       expect(toon, contains('user:'));
@@ -80,10 +77,7 @@ void main() {
 
     test('encodes complex nested structure', () {
       final json = {
-        'context': {
-          'task': 'Our favorite hikes',
-          'location': 'Boulder'
-        },
+        'context': {'task': 'Our favorite hikes', 'location': 'Boulder'},
         'friends': ['ana', 'luis', 'sam'],
         'hikes': [
           {'id': 1, 'name': 'Blue Lake Trail', 'distance': 7.5},

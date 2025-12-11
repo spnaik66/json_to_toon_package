@@ -36,7 +36,7 @@ class ToonDecoder {
 
     while (i < lines.length) {
       final line = lines[i];
-      
+
       // Skip empty lines
       if (line.trim().isEmpty) {
         i++;
@@ -44,17 +44,17 @@ class ToonDecoder {
       }
 
       final indent = _getIndentLevel(line);
-      
+
       // If indent decreased, we're done with this object
       if (i > startIndex && indent < _getIndentLevel(lines[startIndex])) {
         break;
       }
 
       final trimmed = line.trim();
-      
+
       // Check if this is an array declaration: key[count]... or key[count]{...}:
       final arrayKeyMatch = RegExp(r'^([^\[]+)(\[.+)$').firstMatch(trimmed);
-      
+
       if (arrayKeyMatch != null) {
         // This is an array
         final key = _unquoteString(arrayKeyMatch.group(1)!.trim());
@@ -64,7 +64,7 @@ class ToonDecoder {
         i = arrayResult.nextIndex;
         continue;
       }
-      
+
       // Parse key-value pair
       final colonIndex = _findUnquotedColon(trimmed);
       if (colonIndex == -1) {
@@ -99,19 +99,20 @@ class ToonDecoder {
     }
 
     final count = int.parse(countMatch.group(1)!);
-    
+
     // Check for tabular format: [count]{key1,key2}:
-    final tabularMatch = RegExp(r'\[(\d+)\]\{([^}]+)\}:(.*)').firstMatch(header);
-    
+    final tabularMatch =
+        RegExp(r'\[(\d+)\]\{([^}]+)\}:(.*)').firstMatch(header);
+
     if (tabularMatch != null) {
       // Tabular array of objects
       final keysStr = tabularMatch.group(2)!;
       final keys = keysStr.split(',').map((k) => k.trim()).toList();
       final remainingValues = tabularMatch.group(3)!.trim();
-      
+
       final result = <Map<String, dynamic>>[];
       var currentLine = lineIndex;
-      
+
       // If values are on the same line
       if (remainingValues.isNotEmpty) {
         final values = _parseDelimitedValues(remainingValues);
@@ -123,23 +124,23 @@ class ToonDecoder {
           result.add(obj);
         }
       }
-      
+
       // Parse remaining rows
       currentLine++;
       final baseIndent = _getIndentLevel(lines[lineIndex]);
-      
+
       while (result.length < count && currentLine < lines.length) {
         final line = lines[currentLine];
         if (line.trim().isEmpty) {
           currentLine++;
           continue;
         }
-        
+
         final lineIndent = _getIndentLevel(line);
         if (lineIndent <= baseIndent) {
           break;
         }
-        
+
         final values = _parseDelimitedValues(line.trim());
         if (values.length == keys.length) {
           final obj = <String, dynamic>{};
@@ -148,49 +149,49 @@ class ToonDecoder {
           }
           result.add(obj);
         }
-        
+
         currentLine++;
       }
-      
+
       return _ParseResult(result, currentLine);
     }
-    
+
     // Check for inline primitive array: [count]: val1,val2,val3
     final inlineMatch = RegExp(r'\[(\d+)\]:\s*(.+)').firstMatch(header);
-    
+
     if (inlineMatch != null) {
       final valuesStr = inlineMatch.group(2)!;
-      
+
       // Check if values are on same line
       if (!valuesStr.trim().isEmpty) {
         final values = _parseDelimitedValues(valuesStr);
         return _ParseResult(values, lineIndex + 1);
       }
-      
+
       // Values on next lines (expanded list)
       final result = [];
       var currentLine = lineIndex + 1;
       final baseIndent = _getIndentLevel(lines[lineIndex]);
-      
+
       while (result.length < count && currentLine < lines.length) {
         final line = lines[currentLine];
         if (line.trim().isEmpty) {
           currentLine++;
           continue;
         }
-        
+
         final lineIndent = _getIndentLevel(line);
         if (lineIndent <= baseIndent) {
           break;
         }
-        
+
         result.add(_parseValue(line.trim()));
         currentLine++;
       }
-      
+
       return _ParseResult(result, currentLine);
     }
-    
+
     return _ParseResult([], lineIndex + 1);
   }
 
@@ -263,9 +264,9 @@ class ToonDecoder {
 
   String _unquoteString(String str) {
     final trimmed = str.trim();
-    
-    if (trimmed.length >= 2 && 
-        trimmed.startsWith('"') && 
+
+    if (trimmed.length >= 2 &&
+        trimmed.startsWith('"') &&
         trimmed.endsWith('"')) {
       // Remove quotes and unescape
       var unescaped = trimmed.substring(1, trimmed.length - 1);
@@ -277,16 +278,18 @@ class ToonDecoder {
           .replaceAll('\\\\', '\\');
       return unescaped;
     }
-    
+
     return trimmed;
   }
 
   int _getIndentLevel(String line) {
     var count = 0;
     for (var char in line.runes) {
-      if (char == 32) { // space
+      if (char == 32) {
+        // space
         count++;
-      } else if (char == 9) { // tab
+      } else if (char == 9) {
+        // tab
         count += 2; // treat tab as 2 spaces
       } else {
         break;

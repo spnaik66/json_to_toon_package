@@ -29,7 +29,7 @@ class ToonEncoder {
     if (json is String) {
       return json;
     }
-    
+
     if (json is Map) {
       return _encodeObject(json, 0);
     } else if (json is List) {
@@ -62,7 +62,7 @@ class ToonEncoder {
 
       buffer.write(indent * level);
       buffer.write(_encodeKey(key));
-      
+
       if (value is Map) {
         buffer.write(':');
         buffer.writeln();
@@ -84,8 +84,8 @@ class ToonEncoder {
     }
 
     // Check if all elements are primitives (not objects or arrays)
-    final allPrimitives = list.every((e) => 
-      e == null || e is String || e is num || e is bool);
+    final allPrimitives =
+        list.every((e) => e == null || e is String || e is num || e is bool);
 
     if (allPrimitives) {
       // Inline primitive array: key[n]: val1,val2,val3
@@ -95,13 +95,12 @@ class ToonEncoder {
 
     // Check if all elements are objects with the same keys (uniform)
     final allObjects = list.every((e) => e is Map);
-    
+
     if (allObjects && list.isNotEmpty) {
       final firstKeys = (list[0] as Map).keys.toSet();
       final allSameKeys = list.every((e) {
         final keys = (e as Map).keys.toSet();
-        return keys.length == firstKeys.length && 
-               keys.containsAll(firstKeys);
+        return keys.length == firstKeys.length && keys.containsAll(firstKeys);
       });
 
       if (allSameKeys) {
@@ -121,7 +120,8 @@ class ToonEncoder {
     final buffer = StringBuffer();
 
     // Header: arrayName[count]{key1,key2,key3}:
-    buffer.write('[${list.length}]{${keys.map((k) => _encodeKey(k)).join(',')}}:');
+    buffer.write(
+        '[${list.length}]{${keys.map((k) => _encodeKey(k)).join(',')}}:');
 
     // Rows: one per line
     for (var obj in list) {
@@ -141,7 +141,7 @@ class ToonEncoder {
     for (var item in list) {
       buffer.writeln();
       buffer.write(indent * (level + 1));
-      
+
       if (item is Map) {
         buffer.write(_encodeObject(item, level + 1));
       } else if (item is List) {
@@ -189,7 +189,7 @@ class ToonEncoder {
 
   bool _needsQuoting(String str) {
     if (str.isEmpty) return true;
-    
+
     // Check for special characters that require quoting
     final specialChars = [',', ':', '{', '}', '[', ']', '\n', '\r', '\t'];
     if (specialChars.any((c) => str.contains(c))) {
@@ -217,7 +217,7 @@ class ToonEncoder {
         .replaceAll('\n', '\\n')
         .replaceAll('\r', '\\r')
         .replaceAll('\t', '\\t');
-    
+
     return '"$escaped"';
   }
 }

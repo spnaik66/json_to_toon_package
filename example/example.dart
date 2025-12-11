@@ -24,10 +24,7 @@ void main() {
     'user': {
       'name': 'Bob',
       'email': 'bob@example.com',
-      'settings': {
-        'theme': 'dark',
-        'notifications': true
-      }
+      'settings': {'theme': 'dark', 'notifications': true}
     }
   };
   final nestedToon = converter.toToon(nestedData);
@@ -96,15 +93,15 @@ void main() {
   final originalToon = 'name: Alice\nage: 30\nactive: true';
   print('Original TOON:');
   print(originalToon);
-  
+
   final decoded = converter.fromToon(originalToon);
   print('\nDecoded to Dart object:');
   print(decoded);
-  
+
   final reencoded = converter.toToon(decoded);
   print('\nRe-encoded to TOON:');
   print(reencoded);
-  
+
   print('\nRound-trip successful: ${originalToon == reencoded}');
   print('\n---\n');
 
@@ -113,6 +110,8 @@ void main() {
   final jsonString = converter.toonToJson(complexToon);
   print('JSON length: ${jsonString.length} characters');
   print('TOON length: ${complexToon.length} characters');
-  final reduction = ((jsonString.length - complexToon.length) / jsonString.length * 100).toStringAsFixed(1);
+  final reduction =
+      ((jsonString.length - complexToon.length) / jsonString.length * 100)
+          .toStringAsFixed(1);
   print('Reduction: $reduction%');
 }

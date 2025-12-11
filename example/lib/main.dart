@@ -33,7 +33,7 @@ class _ConverterPageState extends State<ConverterPage> {
   final TextEditingController _inputController = TextEditingController();
   final TextEditingController _outputController = TextEditingController();
   final ToonConverter _converter = ToonConverter();
-  
+
   bool _isJsonToToon = true;
   String _errorMessage = '';
 
@@ -134,9 +134,11 @@ class _ConverterPageState extends State<ConverterPage> {
                     Text(
                       _isJsonToToon ? 'JSON → TOON' : 'TOON → JSON',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.bold,
-                      ),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(width: 16),
                     IconButton(
@@ -149,7 +151,7 @@ class _ConverterPageState extends State<ConverterPage> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // Input field
             Expanded(
               child: Column(
@@ -175,9 +177,9 @@ class _ConverterPageState extends State<ConverterPage> {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Action buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -195,9 +197,9 @@ class _ConverterPageState extends State<ConverterPage> {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Error message
             if (_errorMessage.isNotEmpty)
               Card(
@@ -212,9 +214,9 @@ class _ConverterPageState extends State<ConverterPage> {
                   ),
                 ),
               ),
-            
+
             if (_errorMessage.isNotEmpty) const SizedBox(height: 16),
-            
+
             // Output field
             Expanded(
               child: Column(
